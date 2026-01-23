@@ -1,73 +1,114 @@
-# React + TypeScript + Vite
+# Estudiante Elite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**Tutor pedagógico de IA exclusivo para estudiantes de Derecho**
 
-Currently, two official plugins are available:
+![License](https://img.shields.io/badge/license-MIT-blue.svg)
+![React](https://img.shields.io/badge/React-19.2.0-61dafb.svg)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.9.3-3178c6.svg)
+![Vite](https://img.shields.io/badge/Vite-7.3.1-646cff.svg)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🎓 Descripción
 
-## React Compiler
+Estudiante Elite es una aplicación web premium diseñada como tutor pedagógico personalizado para estudiantes de Derecho. Combina una interfaz moderna con efectos glassmorphism, animaciones suaves y un diseño centrado en el chat para crear una experiencia de estudio profesional y atractiva.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## ✨ Características
 
-## Expanding the ESLint configuration
+- 🎨 **Diseño Premium**: Interfaz moderna con glassmorphism y modo oscuro
+- 💬 **Chat Interactivo**: Conversación fluida con el tutor de IA
+- 📚 **Historial de Conversaciones**: Organización de sesiones de estudio
+- ⚡ **Animaciones Suaves**: Transiciones y micro-interacciones con Framer Motion
+- 🎯 **Generación de Esquemas**: Función para crear resúmenes estructurados (en desarrollo)
+- 📱 **Diseño Responsive**: Adaptado para diferentes tamaños de pantalla
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## 🚀 Tecnologías
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+- **Framework**: Vite + React 19 + TypeScript
+- **Styling**: Vanilla CSS con CSS Variables
+- **Animations**: Framer Motion 11
+- **Icons**: Lucide React
+- **Build Tool**: Vite 7.3.1
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+## 🛠️ Instalación
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+# Clonar el repositorio
+git clone https://github.com/TU_USUARIO/estudiante-elite.git
+
+# Navegar al directorio
+cd estudiante-elite
+
+# Instalar dependencias
+npm install --legacy-peer-deps
+
+# Iniciar servidor de desarrollo
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## 📦 Scripts Disponibles
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm run dev      # Inicia el servidor de desarrollo
+npm run build    # Construye la aplicación para producción
+npm run preview  # Previsualiza la build de producción
+npm run lint     # Ejecuta el linter
 ```
+
+## 🎨 Sistema de Diseño
+
+### Paleta de Colores
+
+- **Primary (Deep Blue)**: `#1E3A8A`
+- **Secondary Blue**: `#2B5497`
+- **Background (Dark Slate)**: `#121827`
+- **Accent (Cyan)**: `#00C2FF`
+- **Highlight (Soft Gold)**: `#E1C699`
+
+### Tipografía
+
+- **UI**: Inter
+- **Headings**: Outfit
+
+## 📁 Estructura del Proyecto
+
+```
+estudiante-elite/
+├── src/
+│   ├── components/
+│   │   ├── Button.tsx
+│   │   ├── Sidebar.tsx
+│   │   ├── ChatMessage.tsx
+│   │   ├── ChatInput.tsx
+│   │   └── ThinkingIndicator.tsx
+│   ├── App.tsx
+│   ├── App.css
+│   ├── index.css
+│   └── main.tsx
+├── public/
+├── index.html
+└── package.json
+```
+
+## 🔮 Próximas Funcionalidades
+
+- [ ] Integración con ChatGPT 5.2 API
+- [ ] Implementación RAG con manuales de Derecho
+- [ ] Exportación a PDF de esquemas y resúmenes
+- [ ] Sistema de autenticación de usuarios
+- [ ] Persistencia de conversaciones
+- [ ] Técnicas de estudio avanzadas (Método Feynman)
+
+## 🤝 Contribuir
+
+Las contribuciones son bienvenidas. Por favor, abre un issue primero para discutir los cambios que te gustaría realizar.
+
+## 📄 Licencia
+
+Este proyecto está bajo la Licencia MIT.
+
+## 👨‍💻 Autor
+
+Desarrollado con ❤️ para estudiantes de Derecho
+
+---
+
+**Nota**: Esta es una aplicación de demostración. La integración con IA y funcionalidades avanzadas están en desarrollo.
