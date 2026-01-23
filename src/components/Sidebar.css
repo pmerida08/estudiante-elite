@@ -129,3 +129,21 @@
   font-size: 0.75rem;
   color: var(--color-text-secondary);
 }
+
+.sidebar__logout {
+  background: transparent;
+  border: none;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  padding: var(--spacing-xs);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-base);
+}
+
+.sidebar__logout:hover {
+  background: var(--glass-bg-strong);
+  color: var(--color-accent);
+}

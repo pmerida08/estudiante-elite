@@ -4,6 +4,8 @@ import { Sidebar } from "./components/Sidebar";
 import { ChatMessage } from "./components/ChatMessage";
 import { ChatInput } from "./components/ChatInput";
 import { ThinkingIndicator } from "./components/ThinkingIndicator";
+import { AuthForm } from "./components/AuthForm";
+import { useAuth } from "./contexts/AuthContext";
 
 interface Message {
   id: string;
@@ -13,6 +15,8 @@ interface Message {
 }
 
 function App() {
+  const { user, loading } = useAuth();
+
   const [messages, setMessages] = useState<Message[]>([
     {
       id: "1",
@@ -55,6 +59,38 @@ function App() {
     );
   };
 
+  // Show loading state while checking authentication
+  if (loading) {
+    return (
+      <div
+        className="app"
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          height: "100vh",
+        }}
+      >
+        <div style={{ textAlign: "center" }}>
+          <div className="thinking-indicator">
+            <div className="thinking-dot"></div>
+            <div className="thinking-dot"></div>
+            <div className="thinking-dot"></div>
+          </div>
+          <p style={{ marginTop: "1rem", color: "var(--text-secondary)" }}>
+            Cargando...
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  // Show AuthForm if user is not authenticated
+  if (!user) {
+    return <AuthForm />;
+  }
+
+  // Show Chat interface if user is authenticated
   return (
     <div className="app">
       <Sidebar />

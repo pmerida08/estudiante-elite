@@ -2,13 +2,27 @@ import { motion } from "framer-motion";
 import { clsx } from "clsx";
 import "./Sidebar.css";
 import { Button } from "./Button";
-import { MessageSquarePlus, User } from "lucide-react";
+import { MessageSquarePlus, User, LogOut } from "lucide-react";
+import { useAuth } from "../contexts/AuthContext";
 
 interface SidebarProps {
   className?: string;
 }
 
 export function Sidebar({ className }: SidebarProps) {
+  const { user, signOut } = useAuth();
+
+  // Get full name from user metadata
+  const fullName = user?.user_metadata?.full_name || "Estudiante";
+
+  const handleLogout = async () => {
+    try {
+      await signOut();
+    } catch (error) {
+      console.error("Error signing out:", error);
+    }
+  };
+
   // Mock conversation history
   const conversations = [
     { id: "1", title: "Derecho Civil - Contratos", date: "Hoy" },
@@ -61,9 +75,16 @@ export function Sidebar({ className }: SidebarProps) {
             <User size={20} />
           </div>
           <div className="sidebar__user-info">
-            <div className="sidebar__user-name">Estudiante</div>
+            <div className="sidebar__user-name">{fullName}</div>
             <div className="sidebar__user-status">En línea</div>
           </div>
+          <button
+            className="sidebar__logout"
+            onClick={handleLogout}
+            title="Cerrar sesión"
+          >
+            <LogOut size={18} />
+          </button>
         </div>
       </div>
     </motion.aside>
