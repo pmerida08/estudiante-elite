@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { motion } from "framer-motion";
 import { useAuth } from "../contexts/AuthContext";
 import { Button } from "./Button";
 import {
@@ -66,12 +65,7 @@ export function AuthForm() {
 
   return (
     <div className="auth-container">
-      <motion.div
-        className="auth-card glass-strong"
-        initial={{ scale: 0.95, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        transition={{ duration: 0.3 }}
-      >
+      <div className="auth-card glass-strong animate-scale-in">
         <div className="auth-header">
           <h1 className="auth-logo">Estudiante Elite</h1>
           <p className="auth-subtitle">
@@ -81,7 +75,7 @@ export function AuthForm() {
 
         <form onSubmit={handleSubmit} className="auth-form">
           {!isLogin && (
-            <div className="auth-field">
+            <div className="auth-field animate-fade-in">
               <label htmlFor="fullName" className="auth-label">
                 <UserIcon size={18} />
                 Nombre completo
@@ -131,22 +125,10 @@ export function AuthForm() {
             />
           </div>
 
-          {error && (
-            <motion.div
-              className="auth-error"
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-            >
-              {error}
-            </motion.div>
-          )}
+          {error && <div className="auth-error animate-fade-in">{error}</div>}
 
           {registrationSuccess && (
-            <motion.div
-              className="auth-success"
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-            >
+            <div className="auth-success animate-fade-in">
               <CheckCircle size={20} />
               <div>
                 <strong>¡Cuenta creada exitosamente!</strong>
@@ -155,7 +137,7 @@ export function AuthForm() {
                   cuenta antes de iniciar sesión.
                 </p>
               </div>
-            </motion.div>
+            </div>
           )}
 
           <Button
@@ -189,7 +171,7 @@ export function AuthForm() {
             {isLogin ? "Crear cuenta" : "Iniciar sesión"}
           </button>
         </div>
-      </motion.div>
+      </div>
     </div>
   );
 }

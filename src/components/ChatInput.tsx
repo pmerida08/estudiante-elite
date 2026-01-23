@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { motion } from "framer-motion";
 import "./ChatInput.css";
 import { Button } from "./Button";
 import { Send, FileText } from "lucide-react";
@@ -24,12 +23,7 @@ export function ChatInput({
   };
 
   return (
-    <motion.div
-      className="chat-input"
-      initial={{ y: 20, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.3, delay: 0.1 }}
-    >
+    <div className="chat-input slide-up">
       <div className="chat-input__actions">
         <Button
           variant="secondary"
@@ -61,6 +55,6 @@ export function ChatInput({
           </Button>
         </div>
       </form>
-    </motion.div>
+    </div>
   );
 }

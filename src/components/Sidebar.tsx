@@ -1,4 +1,3 @@
-import { motion } from "framer-motion";
 import { clsx } from "clsx";
 import "./Sidebar.css";
 import { Button } from "./Button";
@@ -31,12 +30,7 @@ export function Sidebar({ className }: SidebarProps) {
   ];
 
   return (
-    <motion.aside
-      className={clsx("sidebar", className)}
-      initial={{ x: -20, opacity: 0 }}
-      animate={{ x: 0, opacity: 1 }}
-      transition={{ duration: 0.3 }}
-    >
+    <aside className={clsx("sidebar animate-slide-in-left", className)}>
       <div className="sidebar__header">
         <h1 className="sidebar__logo">Estudiante Elite</h1>
       </div>
@@ -54,16 +48,15 @@ export function Sidebar({ className }: SidebarProps) {
         <div className="sidebar__history">
           <h3 className="sidebar__history-title">Historial</h3>
           <div className="sidebar__conversations">
-            {conversations.map((conv) => (
-              <motion.div
+            {conversations.map((conv, index) => (
+              <div
                 key={conv.id}
-                className="sidebar__conversation"
-                whileHover={{ x: 4 }}
-                transition={{ duration: 0.15 }}
+                className="sidebar__conversation animate-fade-in"
+                style={{ animationDelay: `${index * 0.1}s` }}
               >
                 <div className="sidebar__conversation-title">{conv.title}</div>
                 <div className="sidebar__conversation-date">{conv.date}</div>
-              </motion.div>
+              </div>
             ))}
           </div>
         </div>
@@ -87,6 +80,6 @@ export function Sidebar({ className }: SidebarProps) {
           </button>
         </div>
       </div>
-    </motion.aside>
+    </aside>
   );
 }

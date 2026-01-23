@@ -41,4 +41,17 @@
   border-radius: var(--radius-full);
   background: var(--color-accent);
   display: block;
+  animation: thinking-pulse 1.4s infinite ease-in-out;
+}
+
+@keyframes thinking-pulse {
+  0%,
+  100% {
+    opacity: 0.3;
+    transform: scale(0.8);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.1);
+  }
 }

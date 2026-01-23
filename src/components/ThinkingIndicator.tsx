@@ -1,9 +1,8 @@
-import { motion } from "framer-motion";
 import "./ThinkingIndicator.css";
 
 export function ThinkingIndicator() {
   return (
-    <div className="thinking">
+    <div className="thinking fade-in">
       <div className="thinking__avatar">
         <svg
           width="20"
@@ -19,21 +18,9 @@ export function ThinkingIndicator() {
       </div>
       <div className="thinking__bubble glass-strong">
         <div className="thinking__dots">
-          <motion.span
-            className="thinking__dot"
-            animate={{ opacity: [0.3, 1, 0.3] }}
-            transition={{ duration: 1.5, repeat: Infinity, delay: 0 }}
-          />
-          <motion.span
-            className="thinking__dot"
-            animate={{ opacity: [0.3, 1, 0.3] }}
-            transition={{ duration: 1.5, repeat: Infinity, delay: 0.2 }}
-          />
-          <motion.span
-            className="thinking__dot"
-            animate={{ opacity: [0.3, 1, 0.3] }}
-            transition={{ duration: 1.5, repeat: Infinity, delay: 0.4 }}
-          />
+          <span className="thinking__dot" style={{ animationDelay: "0s" }} />
+          <span className="thinking__dot" style={{ animationDelay: "0.2s" }} />
+          <span className="thinking__dot" style={{ animationDelay: "0.4s" }} />
         </div>
       </div>
     </div>
