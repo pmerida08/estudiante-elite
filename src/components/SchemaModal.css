@@ -1,0 +1,163 @@
+.schema-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: var(--spacing-md);
+}
+
+.schema-modal {
+  background: var(--glass-bg-strong);
+  backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-xl);
+  width: 100%;
+  max-width: 800px;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--shadow-2xl);
+}
+
+.schema-modal__header {
+  padding: var(--spacing-xl);
+  border-bottom: 1px solid var(--glass-border);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.schema-modal__title-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.schema-modal__title {
+  font-family: var(--font-heading);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin: 0;
+}
+
+.schema-modal__subtitle {
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+  margin: 0;
+}
+
+.schema-modal__close {
+  background: transparent;
+  border: none;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  padding: var(--spacing-xs);
+  border-radius: var(--radius-md);
+  transition: all var(--transition-base);
+}
+
+.schema-modal__close:hover {
+  background: var(--glass-bg);
+  color: var(--color-accent);
+}
+
+.schema-modal__content {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--spacing-xl);
+}
+
+.schema-modal__markdown {
+  color: var(--color-text-primary);
+  line-height: 1.7;
+}
+
+.schema-modal__markdown h1,
+.schema-modal__markdown h2,
+.schema-modal__markdown h3 {
+  color: var(--color-accent);
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.schema-modal__markdown p {
+  margin-bottom: 1rem;
+}
+
+.schema-modal__markdown strong {
+  color: var(--color-secondary);
+}
+
+.schema-modal__markdown ul,
+.schema-modal__markdown ol {
+  margin-bottom: 1rem;
+  padding-left: 1.5rem;
+}
+
+/* Mermaid Styling */
+.mermaid {
+  background: rgba(255, 255, 255, 0.05);
+  padding: var(--spacing-lg);
+  border-radius: var(--radius-md);
+  margin: var(--spacing-xl) 0;
+  display: flex !important;
+  justify-content: center;
+}
+
+.mermaid svg {
+  max-width: 100% !important;
+  height: auto !important;
+}
+
+/* Printing Mode Overrides */
+.printing-mode {
+  background: white !important;
+  color: #0f172a !important;
+}
+
+.printing-mode .schema-modal__markdown {
+  color: #1e293b !important;
+}
+
+.printing-mode .schema-modal__markdown h1,
+.printing-mode .schema-modal__markdown h2,
+.printing-mode .schema-modal__markdown h3 {
+  color: #0284c7 !important; /* Blue for headings in PDF */
+}
+
+.printing-mode .schema-modal__markdown strong {
+  color: #0369a1 !important;
+}
+
+.printing-mode .mermaid {
+  background: #f8fafc !important;
+  border: 1px solid #e2e8f0;
+}
+
+.printing-mode .mermaid svg {
+  filter: invert(0.8) hue-rotate(180deg); /* Adjust mermaid for white back */
+}
+
+.schema-modal__footer {
+  padding: var(--spacing-lg) var(--spacing-xl);
+  border-top: 1px solid var(--glass-border);
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--spacing-md);
+}
+
+@media (max-width: 640px) {
+  .schema-modal {
+    max-height: 100vh;
+    height: 100vh;
+    border-radius: 0;
+  }
+}

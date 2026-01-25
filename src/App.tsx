@@ -6,8 +6,9 @@ import { ChatInput } from "./components/ChatInput";
 import { ThinkingIndicator } from "./components/ThinkingIndicator";
 import { AuthForm } from "./components/AuthForm";
 import { useAuth } from "./contexts/AuthContext";
-import { sendMessageToTutor } from "./lib/n8n";
+import { sendMessageToTutor, generateSchema } from "./lib/n8n";
 import { getMessages, saveMessage, createConversation } from "./lib/chat";
+import { SchemaModal } from "./components/SchemaModal";
 
 interface Message {
   id: string;
@@ -23,6 +24,8 @@ function App() {
   >(null);
   const [messages, setMessages] = useState<Message[]>([]);
   const [isThinking, setIsThinking] = useState(false);
+  const [schemaContent, setSchemaContent] = useState<string | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   // Initial welcome message
   const welcomeMessage: Message = {
@@ -124,8 +127,25 @@ function App() {
     }
   };
 
-  const handleGenerateSummary = () => {
-    alert("Funcionalidad de generación de esquemas en desarrollo.");
+  const handleGenerateSummary = async () => {
+    if (!activeConversationId) {
+      alert("Por favor, inicia una conversación primero.");
+      return;
+    }
+
+    setIsThinking(true);
+    try {
+      const schema = await generateSchema(activeConversationId);
+      setSchemaContent(schema);
+      setIsModalOpen(true);
+    } catch (error) {
+      console.error("Error al generar el esquema:", error);
+      alert(
+        "Hubo un problema al generar el esquema. Por favor, inténtalo de nuevo.",
+      );
+    } finally {
+      setIsThinking(false);
+    }
   };
 
   // Show loading state while checking authentication
@@ -198,6 +218,12 @@ function App() {
           onGenerateSummary={handleGenerateSummary}
         />
       </main>
+
+      <SchemaModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        content={schemaContent || ""}
+      />
     </div>
   );
 }
