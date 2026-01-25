@@ -61,7 +61,7 @@ export function AuthForm() {
       <div className="auth-card">
         <div className="auth-header">
           <img
-            src="/logoEstudianteElite.svg"
+            src="/logoEstudianteElite.png"
             alt="Estudiante Elite Logo"
             className="auth-logo-img"
           />

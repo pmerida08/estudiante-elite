@@ -78,7 +78,7 @@ export function Sidebar({
 
         <div className="sidebar__header">
           <img
-            src="/logoEstudianteElite.svg"
+            src="/logoEstudianteElite.png"
             alt="Estudiante Elite Logo"
             className="sidebar__logo-img"
           />
