@@ -2,7 +2,6 @@
 
 **El tutor pedagógico de IA definitivo para estudiantes de Derecho.**
 
-![Netlify Status](https://img.shields.io/netlify/f2177f98-cccd-4f6c-82ff-889895c1a84f)
 ![React](https://img.shields.io/badge/React-19-61dafb.svg)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5-3178c6.svg)
 ![Vite](https://img.shields.io/badge/Vite-7-646cff.svg)
@@ -68,6 +67,3 @@ VITE_N8N_WEBHOOK_URL=tu_webhook_url
 npm run dev
 ```
 
----
-Desarrollado con ❤️ para los futuros pilares de la justicia.
-⚖️ **Justicia, Rigor y Tecnología.**
