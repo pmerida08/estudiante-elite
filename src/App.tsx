@@ -6,6 +6,7 @@ import { ChatInput } from "./components/ChatInput";
 import { ThinkingIndicator } from "./components/ThinkingIndicator";
 import { AuthForm } from "./components/AuthForm";
 import { useAuth } from "./contexts/AuthContext";
+import { sendMessageToTutor } from "./lib/n8n";
 
 interface Message {
   id: string;
@@ -28,7 +29,7 @@ function App() {
   ]);
   const [isThinking, setIsThinking] = useState(false);
 
-  const handleSendMessage = (content: string) => {
+  const handleSendMessage = async (content: string) => {
     const userMessage: Message = {
       id: Date.now().toString(),
       role: "user",
@@ -36,21 +37,36 @@ function App() {
       timestamp: "Ahora",
     };
 
-    setMessages((prev) => [...prev, userMessage]);
+    setMessages((prev: Message[]) => [...prev, userMessage]);
     setIsThinking(true);
 
-    // Simulate AI response
-    setTimeout(() => {
+    try {
+      if (!user) throw new Error("Debes iniciar sesión para chatear");
+
+      const fullName = user.user_metadata?.full_name || "estudiante";
+      const response = await sendMessageToTutor(content, user.id, fullName);
+
       const aiMessage: Message = {
-        id: (Date.now() + 1).toString(),
+        id: Date.now().toString(),
         role: "assistant",
-        content:
-          "Esta es una respuesta de demostración. En la versión completa, aquí se integraría con ChatGPT 5.2 para proporcionar respuestas pedagógicas personalizadas basadas en tus manuales de Derecho.",
+        content: response,
         timestamp: "Ahora",
       };
-      setMessages((prev) => [...prev, aiMessage]);
+
+      setMessages((prev: Message[]) => [...prev, aiMessage]);
+    } catch (error) {
+      console.error("Chat error:", error);
+      const errorMessage: Message = {
+        id: Date.now().toString(),
+        role: "assistant",
+        content:
+          "Lo siento, hubo un problema al conectar con el tutor. Por favor, inténtalo de nuevo en unos momentos.",
+        timestamp: "Ahora",
+      };
+      setMessages((prev: Message[]) => [...prev, errorMessage]);
+    } finally {
       setIsThinking(false);
-    }, 2000);
+    }
   };
 
   const handleGenerateSummary = () => {
