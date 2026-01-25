@@ -2,6 +2,9 @@ import { clsx } from "clsx";
 import "./ChatMessage.css";
 import { User, Bot } from "lucide-react";
 
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+
 interface ChatMessageProps {
   role: "user" | "assistant";
   content: string;
@@ -18,7 +21,9 @@ export function ChatMessage({ role, content, timestamp }: ChatMessageProps) {
       </div>
       <div className="chat-message__content">
         <div className="chat-message__bubble">
-          <p className="chat-message__text">{content}</p>
+          <div className="chat-message__text">
+            <ReactMarkdown remarkPlugins={[remarkGfm]}>{content}</ReactMarkdown>
+          </div>
         </div>
         {timestamp && (
           <div className="chat-message__timestamp">{timestamp}</div>

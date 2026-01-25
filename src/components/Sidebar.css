@@ -69,7 +69,8 @@
   transition: all var(--transition-base);
 }
 
-.sidebar__conversation:hover {
+.sidebar__conversation:hover,
+.sidebar__conversation--active {
   background: var(--glass-bg-strong);
   border-color: var(--color-accent);
 }
