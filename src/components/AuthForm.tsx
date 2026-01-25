@@ -36,16 +36,10 @@ export function AuthForm() {
           throw new Error("Por favor ingresa tu nombre completo");
         }
         await signUp(email, password, fullName);
-
-        // Show success message
         setRegistrationSuccess(true);
-
-        // Clear form after successful registration
         setEmail("");
         setPassword("");
         setFullName("");
-
-        // Switch to login view after 5 seconds
         setTimeout(() => {
           setIsLogin(true);
           setRegistrationSuccess(false);
@@ -53,7 +47,6 @@ export function AuthForm() {
       }
     } catch (err: unknown) {
       if (err instanceof Error) {
-        // Translate error message to Spanish
         setError(translateAuthError(err));
       } else {
         setError("Ocurrió un error. Por favor intenta de nuevo.");
@@ -64,26 +57,33 @@ export function AuthForm() {
   };
 
   return (
-    <div className="auth-container">
-      <div className="auth-card glass-strong animate-scale-in">
+    <div className="auth-container animate-fade-in">
+      <div className="auth-card">
         <div className="auth-header">
-          <h1 className="auth-logo">Estudiante Elite</h1>
-          <p className="auth-subtitle">
+          <img
+            src="/logoEstudianteElite.svg"
+            alt="Estudiante Elite Logo"
+            className="auth-logo-img"
+          />
+          <h2 className="auth-title">
             {isLogin ? "Bienvenido de nuevo" : "Crea tu cuenta"}
+          </h2>
+          <p className="auth-subtitle">
+            Tu asistente inteligente para el estudio del Derecho
           </p>
         </div>
 
         <form onSubmit={handleSubmit} className="auth-form">
           {!isLogin && (
-            <div className="auth-field animate-fade-in">
+            <div className="auth-field">
               <label htmlFor="fullName" className="auth-label">
-                <UserIcon size={18} />
+                <UserIcon size={16} />
                 Nombre completo
               </label>
               <input
                 id="fullName"
                 type="text"
-                className="auth-input glass"
+                className="auth-input"
                 placeholder="Juan Pérez"
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
@@ -94,13 +94,13 @@ export function AuthForm() {
 
           <div className="auth-field">
             <label htmlFor="email" className="auth-label">
-              <Mail size={18} />
+              <Mail size={16} />
               Correo electrónico
             </label>
             <input
               id="email"
               type="email"
-              className="auth-input glass"
+              className="auth-input"
               placeholder="tu@email.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -110,13 +110,13 @@ export function AuthForm() {
 
           <div className="auth-field">
             <label htmlFor="password" className="auth-label">
-              <Lock size={18} />
+              <Lock size={16} />
               Contraseña
             </label>
             <input
               id="password"
               type="password"
-              className="auth-input glass"
+              className="auth-input"
               placeholder="••••••••"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -132,10 +132,7 @@ export function AuthForm() {
               <CheckCircle size={20} />
               <div>
                 <strong>¡Cuenta creada exitosamente!</strong>
-                <p>
-                  Por favor revisa tu correo electrónico para confirmar tu
-                  cuenta antes de iniciar sesión.
-                </p>
+                <p>Confirma tu correo para empezar.</p>
               </div>
             </div>
           )}
@@ -152,13 +149,13 @@ export function AuthForm() {
               ? "Cargando..."
               : isLogin
                 ? "Iniciar sesión"
-                : "Crear cuenta"}
+                : "Crear mi cuenta"}
           </Button>
         </form>
 
         <div className="auth-toggle">
           <p className="auth-toggle-text">
-            {isLogin ? "¿No tienes cuenta?" : "¿Ya tienes cuenta?"}
+            {isLogin ? "¿Aún no eres miembro?" : "¿Ya tienes una cuenta?"}
           </p>
           <button
             type="button"
@@ -168,7 +165,7 @@ export function AuthForm() {
               setError("");
             }}
           >
-            {isLogin ? "Crear cuenta" : "Iniciar sesión"}
+            {isLogin ? "Regístrate gratis" : "Accede ahora"}
           </button>
         </div>
       </div>

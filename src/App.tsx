@@ -9,6 +9,7 @@ import { useAuth } from "./contexts/AuthContext";
 import { sendMessageToTutor, generateSchema } from "./lib/n8n";
 import { getMessages, saveMessage, createConversation } from "./lib/chat";
 import { SchemaModal } from "./components/SchemaModal";
+import { Menu } from "lucide-react";
 
 interface Message {
   id: string;
@@ -26,6 +27,9 @@ function App() {
   const [isThinking, setIsThinking] = useState(false);
   const [schemaContent, setSchemaContent] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
 
   // Initial welcome message
   const welcomeMessage: Message = {
@@ -183,15 +187,22 @@ function App() {
   return (
     <div className="app">
       <Sidebar
+        isOpen={isSidebarOpen}
+        onClose={() => setIsSidebarOpen(false)}
         activeConversationId={activeConversationId}
         onSelectConversation={setActiveConversationId}
         onNewChat={() => setActiveConversationId(null)}
       />
 
       <main className="app__main">
-        <header className="app__header glass">
+        <header className="app__header">
           <div className="app__header-content">
-            <h2 className="app__header-title">Sesión de estudio</h2>
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <button className="mobile-toggle" onClick={toggleSidebar}>
+                <Menu size={24} />
+              </button>
+              <h2 className="app__header-title">Sesión de estudio</h2>
+            </div>
             <div className="app__header-status">
               <span className="app__status-indicator"></span>
               <span className="app__status-text">Activo</span>

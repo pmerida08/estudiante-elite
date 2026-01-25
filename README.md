@@ -1,114 +1,73 @@
-# Estudiante Elite
+# Estudiante Elite 🛡️⚖️
 
-**Tutor pedagógico de IA exclusivo para estudiantes de Derecho**
+**El tutor pedagógico de IA definitivo para estudiantes de Derecho.**
 
-![License](https://img.shields.io/badge/license-MIT-blue.svg)
-![React](https://img.shields.io/badge/React-19.2.0-61dafb.svg)
-![TypeScript](https://img.shields.io/badge/TypeScript-5.9.3-3178c6.svg)
-![Vite](https://img.shields.io/badge/Vite-7.3.1-646cff.svg)
+![Netlify Status](https://img.shields.io/netlify/f2177f98-cccd-4f6c-82ff-889895c1a84f)
+![React](https://img.shields.io/badge/React-19-61dafb.svg)
+![TypeScript](https://img.shields.io/badge/TypeScript-5-3178c6.svg)
+![Vite](https://img.shields.io/badge/Vite-7-646cff.svg)
+![Supabase](https://img.shields.io/badge/Supabase-Auth%20%26%20DB-3ecf8e.svg)
+![n8n](https://img.shields.io/badge/n8n-Automation-ff6d5a.svg)
 
 ## 🎓 Descripción
 
-Estudiante Elite es una aplicación web premium diseñada como tutor pedagógico personalizado para estudiantes de Derecho. Combina una interfaz moderna con efectos glassmorphism, animaciones suaves y un diseño centrado en el chat para crear una experiencia de estudio profesional y atractiva.
+**Estudiante Elite** es una plataforma educativa premium diseñada específicamente para la comunidad jurídica. Combina algoritmos avanzados de IA con una interfaz de usuario sofisticada para ofrecer tutorías personalizadas, generación de esquemas complejos y gestión eficiente del historial de estudio.
 
-## ✨ Características
+## ✨ Características Principales
 
-- 🎨 **Diseño Premium**: Interfaz moderna con glassmorphism y modo oscuro
-- 💬 **Chat Interactivo**: Conversación fluida con el tutor de IA
-- 📚 **Historial de Conversaciones**: Organización de sesiones de estudio
-- ⚡ **Animaciones Suaves**: Transiciones y micro-interacciones con Framer Motion
-- 🎯 **Generación de Esquemas**: Función para crear resúmenes estructurados (en desarrollo)
-- 📱 **Diseño Responsive**: Adaptado para diferentes tamaños de pantalla
+- 🎨 **Interfaz Premium de Nueva Generación**: Diseño fluido con efectos de glassmorphism, micro-animaciones nativas en CSS y una experiencia visual de alto nivel.
+- 💬 **Tutoría Inteligente via n8n**: Conexión en tiempo real con flujos de trabajo de n8n para proporcionar respuestas precisas y pedagógicas.
+- 📊 **Generador de Esquemas Jurídicos**: Herramienta integrada para transformar conceptos complejos en estructuras visuales claras.
+- 🔐 **Seguridad y Persistencia**: Sistema de autenticación con Supabase y almacenamiento en tiempo real de conversaciones.
+- 🚀 **Optimización Extrema**: Sin dependencias pesadas de animación, utilizando CSS puro para un rendimiento impecable.
 
-## 🚀 Tecnologías
+## 🤖 Arquitectura n8n
 
-- **Framework**: Vite + React 19 + TypeScript
-- **Styling**: Vanilla CSS con CSS Variables
-- **Animations**: Framer Motion 11
-- **Icons**: Lucide React
-- **Build Tool**: Vite 7.3.1
+El núcleo de la inteligencia de Estudiante Elite reside en flujos de trabajo automatizados que gestionan la lógica pedagógica:
 
-## 🛠️ Instalación
+### 1. Tutor Pedagógico Principal
+Este flujo gestiona la conversación interactiva, manteniendo el contexto del usuario y aplicando técnicas de enseñanza adaptativas.
 
-```bash
-# Clonar el repositorio
-git clone https://github.com/TU_USUARIO/estudiante-elite.git
+![Flujo Estudiante Elite](./public/estudianteElite.png)
 
-# Navegar al directorio
-cd estudiante-elite
+### 2. Generador de Esquemas y Resúmenes
+Especializado en el análisis de textos legales, este flujo estructura la información para facilitar la memorización y el repaso.
 
-# Instalar dependencias
-npm install --legacy-peer-deps
+![Generador de Esquemas](./public/generadorEsquemas.png)
 
-# Iniciar servidor de desarrollo
-npm run dev
-```
+## 🛠️ Stack Tecnológico
 
-## 📦 Scripts Disponibles
-
-```bash
-npm run dev      # Inicia el servidor de desarrollo
-npm run build    # Construye la aplicación para producción
-npm run preview  # Previsualiza la build de producción
-npm run lint     # Ejecuta el linter
-```
+- **Frontend**: Vite + React 19 + TypeScript
+- **Estilos**: Vanilla CSS con arquitectura de variables personalizadas
+- **Backend as a Service**: Supabase (Auth, PostgreSQL, RLS)
+- **Capa de IA / Automatización**: n8n Webhooks & Workflows
+- **Iconografía**: Lucide React
+- **Despliegue**: Netlify (CI/CD)
 
 ## 🎨 Sistema de Diseño
 
-### Paleta de Colores
+### Paleta de Colores Exclusiva
+- **Fondo**: `#121827` (Dark Slate Profundo)
+- **Principal**: `#1E3A8A` (Azul Real Académico)
+- **Acento**: `#00C2FF` (Cian Eléctrico)
+- **Resalte**: `#E1C699` (Oro Suave/Cápsula de Tiempo)
+- **Superficies**: Glassmorphism con un 80% de desenfoque.
 
-- **Primary (Deep Blue)**: `#1E3A8A`
-- **Secondary Blue**: `#2B5497`
-- **Background (Dark Slate)**: `#121827`
-- **Accent (Cyan)**: `#00C2FF`
-- **Highlight (Soft Gold)**: `#E1C699`
+## 🚀 Instalación y Desarrollo
 
-### Tipografía
+```bash
+# 1. Instalar dependencias
+npm install
 
-- **UI**: Inter
-- **Headings**: Outfit
+# 2. Configurar variables de entorno (.env)
+VITE_SUPABASE_URL=tu_url
+VITE_SUPABASE_ANON_KEY=tu_key
+VITE_N8N_WEBHOOK_URL=tu_webhook_url
 
-## 📁 Estructura del Proyecto
-
+# 3. Lanzar entorno de desarrollo
+npm run dev
 ```
-estudiante-elite/
-├── src/
-│   ├── components/
-│   │   ├── Button.tsx
-│   │   ├── Sidebar.tsx
-│   │   ├── ChatMessage.tsx
-│   │   ├── ChatInput.tsx
-│   │   └── ThinkingIndicator.tsx
-│   ├── App.tsx
-│   ├── App.css
-│   ├── index.css
-│   └── main.tsx
-├── public/
-├── index.html
-└── package.json
-```
-
-## 🔮 Próximas Funcionalidades
-
-- [ ] Integración con ChatGPT 5.2 API
-- [ ] Implementación RAG con manuales de Derecho
-- [ ] Exportación a PDF de esquemas y resúmenes
-- [ ] Sistema de autenticación de usuarios
-- [ ] Persistencia de conversaciones
-- [ ] Técnicas de estudio avanzadas (Método Feynman)
-
-## 🤝 Contribuir
-
-Las contribuciones son bienvenidas. Por favor, abre un issue primero para discutir los cambios que te gustaría realizar.
-
-## 📄 Licencia
-
-Este proyecto está bajo la Licencia MIT.
-
-## 👨‍💻 Autor
-
-Desarrollado con ❤️ para estudiantes de Derecho
 
 ---
-
-**Nota**: Esta es una aplicación de demostración. La integración con IA y funcionalidades avanzadas están en desarrollo.
+Desarrollado con ❤️ para los futuros pilares de la justicia.
+⚖️ **Justicia, Rigor y Tecnología.**

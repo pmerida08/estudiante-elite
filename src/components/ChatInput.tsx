@@ -23,38 +23,41 @@ export function ChatInput({
   };
 
   return (
-    <div className="chat-input slide-up">
-      <div className="chat-input__actions">
-        <Button
-          variant="secondary"
-          size="sm"
-          icon={<FileText size={18} />}
-          onClick={onGenerateSummary}
-        >
-          Generar esquema
-        </Button>
-      </div>
+    <div className="chat-input animate-fade-in">
+      <div className="chat-input__container">
+        <form onSubmit={handleSubmit} className="chat-input__form">
+          <div className="chat-input__wrapper">
+            <input
+              type="text"
+              className="chat-input__field"
+              placeholder="Hazme cualquier consulta jurídica..."
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+            />
+            <Button
+              type="submit"
+              variant="primary"
+              size="sm"
+              icon={<Send size={18} />}
+              disabled={!message.trim()}
+            >
+              Consultar
+            </Button>
+          </div>
+        </form>
 
-      <form onSubmit={handleSubmit} className="chat-input__form">
-        <div className="chat-input__wrapper glass-strong">
-          <input
-            type="text"
-            className="chat-input__field"
-            placeholder="Escribe tu pregunta sobre Derecho..."
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-          />
+        <div className="chat-input__actions">
           <Button
-            type="submit"
-            variant="primary"
+            variant="ghost"
             size="sm"
-            icon={<Send size={18} />}
-            disabled={!message.trim()}
+            icon={<FileText size={16} />}
+            onClick={onGenerateSummary}
+            className="chat-input__action-btn"
           >
-            Enviar
+            Generar esquema de estudio
           </Button>
         </div>
-      </form>
+      </div>
     </div>
   );
 }
