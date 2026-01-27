@@ -9,9 +9,15 @@ interface ChatMessageProps {
   role: "user" | "assistant";
   content: string;
   timestamp?: string;
+  responseTime?: number; // in seconds
 }
 
-export function ChatMessage({ role, content, timestamp }: ChatMessageProps) {
+export function ChatMessage({
+  role,
+  content,
+  timestamp,
+  responseTime,
+}: ChatMessageProps) {
   const isUser = role === "user";
 
   return (
@@ -25,9 +31,16 @@ export function ChatMessage({ role, content, timestamp }: ChatMessageProps) {
             <ReactMarkdown remarkPlugins={[remarkGfm]}>{content}</ReactMarkdown>
           </div>
         </div>
-        {timestamp && (
-          <div className="chat-message__timestamp">{timestamp}</div>
-        )}
+        <div className="chat-message__meta">
+          {timestamp && (
+            <span className="chat-message__timestamp">{timestamp}</span>
+          )}
+          {!isUser && responseTime && (
+            <span className="chat-message__response-time">
+              · {responseTime}s
+            </span>
+          )}
+        </div>
       </div>
     </div>
   );

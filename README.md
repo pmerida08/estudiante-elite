@@ -14,15 +14,65 @@ El sistema no se limita a responder dudas, sino que actúa como un tutor proacti
 
 ### ✨ Características Principales
 
-- 🎨 **Interfaz Premium de Nueva Generación**: Diseño fluido con efectos de glassmorphism, micro-animaciones nativas en CSS y una experiencia visual de alto nivel.
-
 - 💬 **Tutoría Inteligente via n8n**: Conexión en tiempo real con flujos de trabajo de n8n para proporcionar respuestas precisas y pedagógicas.
+
+- 🎤 **Transcripción de Audio a Texto**: Sistema de reconocimiento de voz integrado para hacer preguntas hablando en lugar de escribir (disponible en Chrome y Safari).
 
 - 📊 **Generador de Esquemas Jurídicos**: Herramienta integrada para transformar conceptos complejos en estructuras visuales claras.
 
 - 🔐 **Seguridad y Persistencia**: Sistema de autenticación con Supabase y almacenamiento en tiempo real de conversaciones e historial.
 
 - 🚀 **Optimización Extrema**: Sin dependencias pesadas de animación, utilizando CSS puro para un rendimiento impecable.
+
+---
+
+### 🎤 Sistema de Transcripción de Audio
+
+La aplicación incluye un sistema de **reconocimiento de voz en tiempo real** que permite hacer preguntas hablando en lugar de escribir.
+
+#### Cómo Usar
+
+1. **Click en el botón de micrófono** (icono 🎤) junto al campo de entrada
+2. **Habla tu pregunta** en español
+3. **El texto aparece en tiempo real** mientras hablas
+4. **Click nuevamente** para detener la grabación
+5. **Revisa y edita** si es necesario antes de enviar
+
+#### Compatibilidad de Navegadores
+
+> **⚠️ IMPORTANTE**: La funcionalidad de transcripción de audio utiliza la **Web Speech API**, que tiene disponibilidad limitada entre navegadores.
+
+![Compatibilidad Web Speech API](./public/speechRecogniseApi.png)
+
+**Navegadores Compatibles:**
+
+- ✅ **Chrome** (Desktop y Android) - Soporte completo
+- ✅ **Edge** (Chromium) - Soporte completo
+- ✅ **Safari** (macOS e iOS) - Soporte completo
+
+**Navegadores con Soporte Limitado o Sin Soporte:**
+
+- ⚠️ **Brave** - Puede requerir desactivar Shields para el sitio
+- ⚠️ **Opera** - Soporte parcial
+- ❌ **Firefox** - Sin soporte
+- ❌ **Internet Explorer** - Sin soporte
+
+Si el navegador no es compatible, el botón de micrófono simplemente no aparecerá y podrás usar la aplicación normalmente escribiendo tus preguntas.
+
+---
+
+### 💡 Feedback Progresivo en Respuestas
+
+Cuando haces una pregunta, la aplicación muestra:
+
+1. **Indicadores de progreso** con mensajes sobre lo que está haciendo:
+   - "Analizando tu pregunta..."
+   - "Consultando la base de conocimientos..."
+   - "Generando respuesta..."
+
+2. **Tiempo de respuesta** mostrado de forma sutil al finalizar cada respuesta del asistente
+
+Esto proporciona transparencia sobre el proceso de IA y mejora la experiencia de usuario.
 
 ---
 
@@ -62,6 +112,7 @@ _Fig 2. Validación del modelo en el flujo de chat OpenAI_
 - **Estilos**: Vanilla CSS con arquitectura de variables personalizadas
 - **Backend as a Service**: Supabase (Auth, PostgreSQL, RLS)
 - **Capa de IA / Automatización**: n8n Webhooks & Workflows
+- **Reconocimiento de Voz**: Web Speech API (nativa del navegador)
 - **Iconografía**: Lucide React
 - **Despliegue**: Netlify (CI/CD)
 
@@ -74,6 +125,12 @@ _Fig 2. Validación del modelo en el flujo de chat OpenAI_
 - **Acento**: `#00C2FF` (Cian Eléctrico)
 - **Resalte**: `#E1C699` (Oro Suave/Cápsula de Tiempo)
 - **Superficies**: Glassmorphism con un 80% de desenfoque.
+
+#### Componentes de UI
+
+- **Botones Circulares de Acción**: Diseño consistente para esquemas y micrófono
+- **Indicadores de Estado**: Animaciones de pulso para grabación activa
+- **Feedback Visual**: Mensajes de progreso durante procesamiento de IA
 
 ---
 
@@ -97,6 +154,7 @@ npm install
 VITE_SUPABASE_URL=tu_url
 VITE_SUPABASE_ANON_KEY=tu_key
 VITE_N8N_WEBHOOK_URL=tu_webhook
+VITE_N8N_SUMMARY_WEBHOOK_URL=tu_webhook_summary
 ```
 
 4. Ejecutar servidor de desarrollo
@@ -105,6 +163,43 @@ VITE_N8N_WEBHOOK_URL=tu_webhook
 npm run dev
 ```
 
+---
+
+### 📝 Notas Técnicas
+
+#### Web Speech API
+
+La funcionalidad de transcripción de audio utiliza la Web Speech API nativa del navegador con la siguiente configuración:
+
+```typescript
+recognition.continuous = true; // Reconocimiento continuo
+recognition.interimResults = true; // Resultados en tiempo real
+recognition.lang = "es-ES"; // Idioma español
+recognition.maxAlternatives = 1; // Una alternativa por resultado
+```
+
+Para más detalles técnicos sobre la implementación, consulta la documentación interna del proyecto.
+
+#### Requisitos del Sistema
+
+- **HTTPS**: La Web Speech API requiere conexión segura (funciona en `localhost` para desarrollo)
+- **Permisos de Micrófono**: El navegador solicitará permiso la primera vez
+- **Navegador Compatible**: Chrome, Edge o Safari recomendados para funcionalidad completa
+
+---
+
+### 🔄 Actualizaciones Recientes
+
+**v2.0.0** - Enero 2026
+
+- ✨ Añadido sistema de transcripción de audio a texto
+- ⏱️ Implementado feedback progresivo durante generación de respuestas
+- 📊 Visualización de tiempo de respuesta en mensajes del asistente
+- 🎨 Rediseño de botones de acción con estilo circular consistente
+- 🔧 Mejoras en la experiencia de usuario y accesibilidad
+
+---
+
 ### Cambios realizados basados en las fuentes [1], [2], [3], [4], [5], [6]:
 
 1.  **Enlace al despliegue**: Se ha añadido al principio, ya que es el entregable nº 1 obligatorio [2].
@@ -112,3 +207,5 @@ npm run dev
 2.  **Sección de Compliance/API**: Se ha añadido la sección con las imágenes `apiDocumentada.png` y `apiDocumentada2.png` para probar el uso de **gpt-5.2** [5], [6] y cumplir el entregable nº 3 [2].
 
 3.  **Refinamiento de RAG**: Se ha modificado la descripción de la arquitectura para mencionar explícitamente "RAG" y "Manuales oficiales", alineándose con el requisito de "Base de Conocimientos" [1].
+
+4.  **Nuevas Funcionalidades**: Documentación completa del sistema de transcripción de audio, feedback progresivo y compatibilidad de navegadores.

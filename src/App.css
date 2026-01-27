@@ -11,9 +11,11 @@
   display: flex;
   flex-direction: column;
   height: 100vh;
+  width: 100%;
   background-color: var(--color-background);
   position: relative;
   transition: transform var(--transition-base);
+  overflow: hidden;
 }
 
 .app__header {
@@ -39,6 +41,19 @@
   letter-spacing: -0.01em;
   color: var(--color-primary);
   margin: 0;
+}
+
+.app__header-logo {
+  height: 40px;
+  width: auto;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.app__header-status {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .app__chat {
@@ -70,9 +85,28 @@
 
 /* Responsive Adjustments */
 @media (max-width: 768px) {
+  .app {
+    overflow-x: hidden;
+  }
+
+  .app__main {
+    width: 100vw;
+    max-width: 100%;
+  }
+
   .app__header {
     padding: 0 var(--spacing-md);
     height: 60px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .app__header-title {
+    font-size: 0.95rem;
+  }
+
+  .app__header-logo {
+    height: 28px;
   }
 
   .mobile-toggle {
@@ -82,6 +116,15 @@
   }
 
   .app__messages {
-    padding: var(--spacing-md);
+    max-width: 100%;
+    width: 100%;
+    padding: var(--spacing-sm);
+    box-sizing: border-box;
+  }
+
+  .app__chat {
+    padding-bottom: 10px;
+    width: 100%;
+    box-sizing: border-box;
   }
 }

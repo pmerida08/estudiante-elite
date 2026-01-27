@@ -26,13 +26,22 @@
   padding: var(--spacing-md) var(--spacing-lg);
   border-radius: var(--radius-lg);
   display: inline-flex;
-  align-items: center;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  align-items: flex-start;
 }
 
 .thinking__dots {
   display: flex;
   gap: 6px;
   align-items: center;
+}
+
+.thinking__status {
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+  opacity: 0.8;
+  animation: fadeIn 0.3s ease-in-out;
 }
 
 .thinking__dot {

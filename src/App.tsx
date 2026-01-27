@@ -3,7 +3,7 @@ import "./App.css";
 import { Sidebar } from "./components/Sidebar";
 import { ChatMessage } from "./components/ChatMessage";
 import { ChatInput } from "./components/ChatInput";
-import { ThinkingIndicator } from "./components/ThinkingIndicator";
+import { ThinkingIndicatorWithStatus } from "./components/ThinkingIndicatorWithStatus";
 import { AuthForm } from "./components/AuthForm";
 import { useAuth } from "./contexts/AuthContext";
 import { sendMessageToTutor, generateSchema } from "./lib/n8n";
@@ -16,6 +16,7 @@ interface Message {
   role: "user" | "assistant";
   content: string;
   timestamp: string;
+  responseTime?: number; // in seconds
 }
 
 function App() {
@@ -25,6 +26,9 @@ function App() {
   >(null);
   const [messages, setMessages] = useState<Message[]>([]);
   const [isThinking, setIsThinking] = useState(false);
+  const [processingStage, setProcessingStage] = useState<
+    "analyzing" | "searching" | "generating"
+  >("analyzing");
   const [schemaContent, setSchemaContent] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -95,15 +99,33 @@ function App() {
     setMessages((prev: Message[]) => [...prev, userMessage]);
     setIsThinking(true);
 
+    // Track start time
+    const startTime = Date.now();
+
     try {
       if (!user) throw new Error("Debes iniciar sesión para chatear");
+
+      // Stage 1: Analyzing
+      setProcessingStage("analyzing");
+      await new Promise((resolve) => setTimeout(resolve, 500)); // Brief pause for UX
 
       // 1. Save user message to DB
       await saveMessage(convId, "user", content);
 
+      // Stage 2: Searching knowledge base
+      setProcessingStage("searching");
+      await new Promise((resolve) => setTimeout(resolve, 300)); // Brief pause for UX
+
+      // Stage 3: Generating response
+      setProcessingStage("generating");
+
       // 2. Get tutor response
       const fullName = user.user_metadata?.full_name || "estudiante";
       const response = await sendMessageToTutor(content, user.id, fullName);
+
+      // Calculate response time
+      const endTime = Date.now();
+      const responseTime = Number(((endTime - startTime) / 1000).toFixed(1));
 
       // 3. Save assistant message to DB
       const savedAi = await saveMessage(convId, "assistant", response);
@@ -113,6 +135,7 @@ function App() {
         role: "assistant",
         content: response,
         timestamp: "Ahora",
+        responseTime,
       };
 
       setMessages((prev: Message[]) => [...prev, aiMessage]);
@@ -128,6 +151,7 @@ function App() {
       setMessages((prev: Message[]) => [...prev, errorMessage]);
     } finally {
       setIsThinking(false);
+      setProcessingStage("analyzing"); // Reset for next time
     }
   };
 
@@ -204,8 +228,11 @@ function App() {
               <h2 className="app__header-title">Sesión de estudio</h2>
             </div>
             <div className="app__header-status">
-              <span className="app__status-indicator"></span>
-              <span className="app__status-text">Activo</span>
+              <img
+                src="/logoDerechoVirtual.png"
+                alt="Derecho Virtual"
+                className="app__header-logo"
+              />
             </div>
           </div>
         </header>
@@ -218,9 +245,12 @@ function App() {
                 role={message.role}
                 content={message.content}
                 timestamp={message.timestamp}
+                responseTime={message.responseTime}
               />
             ))}
-            {isThinking && <ThinkingIndicator />}
+            {isThinking && (
+              <ThinkingIndicatorWithStatus stage={processingStage} />
+            )}
           </div>
         </div>
 

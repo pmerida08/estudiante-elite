@@ -54,6 +54,18 @@
   color: var(--color-primary);
 }
 
+.button--accent {
+  background: linear-gradient(135deg, var(--color-accent), #00d4ff);
+  color: white;
+  box-shadow: 0 4px 20px rgba(0, 194, 255, 0.3);
+  font-weight: 600;
+}
+
+.button--accent:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 25px rgba(0, 194, 255, 0.4);
+}
+
 /* Sizes */
 .button--sm {
   padding: 0.5rem 1rem;
