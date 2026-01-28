@@ -104,11 +104,38 @@
   transform: scale(1.05);
 }
 
+/* Microphone button - recording state */
 .chat-input__mic-btn.recording {
-  background: linear-gradient(135deg, #ff4444, #ff6666);
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
   color: white;
   animation: recording-pulse 1.5s ease-in-out infinite;
   box-shadow: 0 0 20px rgba(255, 68, 68, 0.5);
+}
+
+/* Microphone button - transcribing state */
+.chat-input__mic-btn.transcribing {
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  color: white;
+  cursor: wait;
+}
+
+.chat-input__mic-btn.transcribing:hover {
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  transform: none;
+}
+
+/* Spin animation for loader */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
 }
 
 @keyframes recording-pulse {

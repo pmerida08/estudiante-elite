@@ -27,7 +27,7 @@ function App() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [isThinking, setIsThinking] = useState(false);
   const [processingStage, setProcessingStage] = useState<
-    "analyzing" | "searching" | "generating"
+    "analyzing" | "searching" | "generating" | "schema"
   >("analyzing");
   const [schemaContent, setSchemaContent] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -162,6 +162,7 @@ function App() {
     }
 
     setIsThinking(true);
+    setProcessingStage("schema");
     try {
       const schema = await generateSchema(activeConversationId);
       setSchemaContent(schema);
@@ -173,6 +174,7 @@ function App() {
       );
     } finally {
       setIsThinking(false);
+      setProcessingStage("analyzing"); // Reset for next time
     }
   };
 

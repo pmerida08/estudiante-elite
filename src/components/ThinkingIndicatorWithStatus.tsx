@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import "./ThinkingIndicator.css";
 
 interface ThinkingIndicatorWithStatusProps {
-  stage?: "analyzing" | "searching" | "generating";
+  stage?: "analyzing" | "searching" | "generating" | "schema";
 }
 
 export function ThinkingIndicatorWithStatus({
@@ -22,6 +22,8 @@ export function ThinkingIndicatorWithStatus({
         return "Consultando la base de conocimientos...";
       case "generating":
         return "Generando respuesta...";
+      case "schema":
+        return "Generando esquema de estudio...";
       default:
         return "Procesando...";
     }

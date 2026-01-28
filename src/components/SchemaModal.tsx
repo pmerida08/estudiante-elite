@@ -32,7 +32,7 @@ export function SchemaModal({ isOpen, onClose, content }: SchemaModalProps) {
     setIsExporting(true);
 
     try {
-      // Capture the full scrollable content
+      // Capture the full scrollable content with padding from CSS
       const canvas = await html2canvas(contentRef.current, {
         scale: 2,
         useCORS: true,
@@ -68,37 +68,22 @@ export function SchemaModal({ isOpen, onClose, content }: SchemaModalProps) {
       const pdfHeight = pdf.internal.pageSize.getHeight();
       const imgProps = pdf.getImageProperties(imgData);
 
-      // Calculate how many pages we need based on the FULL captured canvas
-      const contentHeightInPdfUnits =
-        (imgProps.height * pdfWidth) / imgProps.width;
+      // Scale image to fit page width
+      const imgWidth = pdfWidth;
+      const imgHeight = (imgProps.height * pdfWidth) / imgProps.width;
 
-      let heightLeft = contentHeightInPdfUnits;
-      let position = 0;
+      let currentY = 0;
 
-      // Add first page
-      pdf.addImage(
-        imgData,
-        "PNG",
-        0,
-        position,
-        pdfWidth,
-        contentHeightInPdfUnits,
-      );
-      heightLeft -= pdfHeight;
+      // Add pages with proper positioning
+      while (currentY < imgHeight) {
+        if (currentY > 0) {
+          pdf.addPage();
+        }
 
-      // Add additional pages if content is longer
-      while (heightLeft > 0) {
-        position = heightLeft - contentHeightInPdfUnits;
-        pdf.addPage();
-        pdf.addImage(
-          imgData,
-          "PNG",
-          0,
-          position,
-          pdfWidth,
-          contentHeightInPdfUnits,
-        );
-        heightLeft -= pdfHeight;
+        // Negative Y to shift the image up for subsequent pages
+        pdf.addImage(imgData, "PNG", 0, -currentY, imgWidth, imgHeight);
+
+        currentY += pdfHeight;
       }
 
       pdf.save(`esquema-${new Date().getTime()}.pdf`);

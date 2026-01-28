@@ -16,46 +16,13 @@ El sistema no se limita a responder dudas, sino que actúa como un tutor proacti
 
 - 💬 **Tutoría Inteligente via n8n**: Conexión en tiempo real con flujos de trabajo de n8n para proporcionar respuestas precisas y pedagógicas.
 
-- 🎤 **Transcripción de Audio a Texto**: Sistema de reconocimiento de voz integrado para hacer preguntas hablando en lugar de escribir (disponible en Chrome y Safari).
+- 🎤 **Transcripción de Audio con OpenAI Whisper**: Sistema de transcripción de voz que funciona en **todos los navegadores** (Chrome, Firefox, Safari, Edge, Opera, Brave) con alta precisión en terminología legal.
 
 - 📊 **Generador de Esquemas Jurídicos**: Herramienta integrada para transformar conceptos complejos en estructuras visuales claras.
 
 - 🔐 **Seguridad y Persistencia**: Sistema de autenticación con Supabase y almacenamiento en tiempo real de conversaciones e historial.
 
 - 🚀 **Optimización Extrema**: Sin dependencias pesadas de animación, utilizando CSS puro para un rendimiento impecable.
-
----
-
-### 🎤 Sistema de Transcripción de Audio
-
-La aplicación incluye un sistema de **reconocimiento de voz en tiempo real** que permite hacer preguntas hablando en lugar de escribir.
-
-#### Cómo Usar
-
-1. **Click en el botón de micrófono** (icono 🎤) junto al campo de entrada
-2. **Habla tu pregunta** en español
-3. **El texto aparece en tiempo real** mientras hablas
-4. **Click nuevamente** para detener la grabación
-5. **Revisa y edita** si es necesario antes de enviar
-
-#### Compatibilidad de Navegadores
-
-> **⚠️ IMPORTANTE**: La funcionalidad de transcripción de audio utiliza la **Web Speech API**, que tiene disponibilidad limitada entre navegadores.
-
-![Compatibilidad Web Speech API](./public/speechRecogniseApi.png)
-
-**Navegadores Compatibles:**
-
-- ✅ **Chrome** (Desktop y Android) - Soporte completo
-- ✅ **Edge** (Chromium) - Soporte completo
-- ✅ **Safari** (macOS e iOS) - Soporte completo
-
-**Navegadores con Soporte Limitado o Sin Soporte:**
-
-- ⚠️ **Brave** - Puede requerir desactivar Shields para el sitio
-- ⚠️ **Opera** - Soporte parcial
-- ❌ **Firefox** - Sin soporte
-- ❌ **Internet Explorer** - Sin soporte
 
 ---
 
@@ -67,9 +34,22 @@ El núcleo de la inteligencia de Estudiante Elite reside en flujos de trabajo au
 
 Este flujo gestiona la conversación interactiva, manteniendo el contexto del usuario (memoria de sesión) y aplicando técnicas de enseñanza adaptativas como el método Feynman o preguntas de autoevaluación.
 
+![Workflow Principal](./public/estudianteElite.png)
+_Fig 1. Workflow principal del chatbot con memoria y RAG_
+
 #### 2. RAG con Manuales Oficiales
 
 Implementación de **RAG (Generación Aumentada por Recuperación)** utilizando los **manuales oficiales de la carrera**. El sistema consulta la base de conocimientos oficial antes de generar respuestas para asegurar precisión jurídica y alineación con el temario.
+
+![Workflow de Subida de Archivos](./public/subirArchivosBBDD.png)
+_Fig 2. Workflow para indexar documentos en la base de conocimientos_
+
+#### 3. Transcripción de Audio
+
+Sistema de transcripción utilizando **OpenAI Whisper API** que permite a los estudiantes hacer preguntas hablando. El audio se procesa en tiempo real y se convierte a texto con alta precisión en español legal.
+
+![Workflow de Transcripción](./public/transcribirAudio.png)
+_Fig 3. Workflow de n8n para transcripción de audio con OpenAI Whisper_
 
 ---
 
@@ -82,10 +62,10 @@ Para garantizar la **velocidad de respuesta y baja latencia** requerida en las e
 A continuación se adjunta la evidencia de la configuración en los nodos de producción, asegurando el cumplimiento de la optimización del modelo:
 
 ![Configuración Modelo 5.2 - Nodo 1](./public/apiDocumentada.png)
-_Fig 1. Configuración del nodo principal con modelo gpt-5.2_
+_Fig 4. Configuración del nodo principal con modelo gpt-5.2_
 
 ![Configuración Modelo 5.2 - Nodo 2](./public/apiDocumentada2.png)
-_Fig 2. Validación del modelo en el flujo de chat OpenAI_
+_Fig 5. Validación del modelo en el flujo de chat OpenAI_
 
 ---
 
@@ -95,7 +75,7 @@ _Fig 2. Validación del modelo en el flujo de chat OpenAI_
 - **Estilos**: Vanilla CSS con arquitectura de variables personalizadas
 - **Backend as a Service**: Supabase (Auth, PostgreSQL, RLS)
 - **Capa de IA / Automatización**: n8n Webhooks & Workflows
-- **Reconocimiento de Voz**: Web Speech API (nativa del navegador)
+- **Transcripción de Audio**: OpenAI Whisper API (vía n8n)
 - **Iconografía**: Lucide React
 - **Despliegue**: Netlify (CI/CD)
 
@@ -138,6 +118,7 @@ VITE_SUPABASE_URL=tu_url
 VITE_SUPABASE_ANON_KEY=tu_key
 VITE_N8N_WEBHOOK_URL=tu_webhook
 VITE_N8N_SUMMARY_WEBHOOK_URL=tu_webhook_summary
+VITE_N8N_TRANSCRIBE_WEBHOOK_URL=tu_webhook_transcribe
 ```
 
 4. Ejecutar servidor de desarrollo
@@ -150,45 +131,35 @@ npm run dev
 
 ### 📝 Notas Técnicas
 
-#### Web Speech API
+#### Sistema de Transcripción
 
-La funcionalidad de transcripción de audio utiliza la Web Speech API nativa del navegador con la siguiente configuración:
+La funcionalidad de transcripción de audio utiliza **OpenAI Whisper API** a través de n8n con la siguiente arquitectura:
+
+**Frontend (MediaRecorder API):**
 
 ```typescript
-recognition.continuous = true; // Reconocimiento continuo
-recognition.interimResults = true; // Resultados en tiempo real
-recognition.lang = "es-ES"; // Idioma español
-recognition.maxAlternatives = 1; // Una alternativa por resultado
+// Grabación de audio cross-browser
+const recorder = new AudioRecorder();
+await recorder.startRecording(); // Inicia grabación
+const audioBlob = await recorder.stopRecording(); // Obtiene audio
 ```
 
-Para más detalles técnicos sobre la implementación, consulta la documentación interna del proyecto.
+**Backend (n8n + OpenAI Whisper):**
+
+- Webhook recibe audio en formato WebM/Opus
+- OpenAI Whisper transcribe con modelo `whisper-1`
+- Configurado para español (`es`) con alta precisión en terminología legal
+- Respuesta JSON con texto transcrito
+
+**Ventajas técnicas:**
+
+- ✅ Compatible con todos los navegadores modernos (MediaRecorder API)
+- ✅ Procesamiento en la nube (no consume recursos del cliente)
+- ✅ Optimizado para español
 
 #### Requisitos del Sistema
 
-- **HTTPS**: La Web Speech API requiere conexión segura (funciona en `localhost` para desarrollo)
+- **HTTPS**: Requerido para acceso al micrófono (funciona en `localhost` para desarrollo)
 - **Permisos de Micrófono**: El navegador solicitará permiso la primera vez
-- **Navegador Compatible**: Chrome, Edge o Safari recomendados para funcionalidad completa
-
----
-
-### 🔄 Actualizaciones Recientes
-
-**v2.0.0** - Enero 2026
-
-- ✨ Añadido sistema de transcripción de audio a texto
-- ⏱️ Implementado feedback progresivo durante generación de respuestas
-- 📊 Visualización de tiempo de respuesta en mensajes del asistente
-- 🎨 Rediseño de botones de acción con estilo circular consistente
-- 🔧 Mejoras en la experiencia de usuario y accesibilidad
-
----
-
-### Cambios realizados basados en las fuentes [1], [2], [3], [4], [5], [6]:
-
-1.  **Enlace al despliegue**: Se ha añadido al principio, ya que es el entregable nº 1 obligatorio [2].
-
-2.  **Sección de Compliance/API**: Se ha añadido la sección con las imágenes `apiDocumentada.png` y `apiDocumentada2.png` para probar el uso de **gpt-5.2** [5], [6] y cumplir el entregable nº 3 [2].
-
-3.  **Refinamiento de RAG**: Se ha modificado la descripción de la arquitectura para mencionar explícitamente "RAG" y "Manuales oficiales", alineándose con el requisito de "Base de Conocimientos" [1].
-
-4.  **Nuevas Funcionalidades**: Documentación completa del sistema de transcripción de audio, feedback progresivo y compatibilidad de navegadores.
+- **Conexión a Internet**: Necesaria para enviar audio a n8n/OpenAI
+- **n8n Webhook**: Debe estar configurado y activo

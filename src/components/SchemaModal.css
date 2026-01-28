@@ -122,6 +122,8 @@
 
 .printing-mode .schema-modal__markdown {
   color: #1a1a1a !important;
+  padding: 60px !important;
+  box-sizing: border-box !important;
 }
 
 .printing-mode .schema-modal__markdown h1,

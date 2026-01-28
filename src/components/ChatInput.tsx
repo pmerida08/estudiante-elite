@@ -1,16 +1,14 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useRef } from "react";
 import "./ChatInput.css";
 import { Button } from "./Button";
-import { Send, FileText, Mic, MicOff } from "lucide-react";
+import { Send, FileText, Mic, MicOff, Loader2 } from "lucide-react";
+import { AudioRecorder } from "../lib/audioRecorder";
+import { transcribeAudio } from "../lib/transcription";
 
 interface ChatInputProps {
   onSendMessage: (message: string) => void;
   onGenerateSummary?: () => void;
 }
-
-// Check if browser supports Speech Recognition
-const SpeechRecognition =
-  (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
 
 export function ChatInput({
   onSendMessage,
@@ -18,93 +16,82 @@ export function ChatInput({
 }: ChatInputProps) {
   const [message, setMessage] = useState("");
   const [isRecording, setIsRecording] = useState(false);
-  const [isSupported, setIsSupported] = useState(false);
-  const recognitionRef = useRef<any>(null);
-  const finalTranscriptRef = useRef<string>(""); // Track final transcript
-
-  useEffect(() => {
-    // Check if Speech Recognition is supported
-    if (SpeechRecognition) {
-      setIsSupported(true);
-      const recognition = new SpeechRecognition();
-      recognition.continuous = true; // Enable continuous recognition
-      recognition.interimResults = true;
-      recognition.lang = "es-ES"; // Spanish language
-      recognition.maxAlternatives = 1;
-
-      recognition.onresult = (event: any) => {
-        let interimTranscript = "";
-        let finalTranscript = "";
-
-        // Process only new results starting from resultIndex
-        for (let i = event.resultIndex; i < event.results.length; i++) {
-          const transcript = event.results[i][0].transcript;
-          if (event.results[i].isFinal) {
-            finalTranscript += transcript + " ";
-          } else {
-            interimTranscript += transcript;
-          }
-        }
-
-        // Update the message field
-        if (finalTranscript) {
-          // Add final transcript to our reference
-          finalTranscriptRef.current += finalTranscript;
-          setMessage(finalTranscriptRef.current);
-        } else if (interimTranscript) {
-          // Show interim results without saving them
-          setMessage(finalTranscriptRef.current + interimTranscript);
-        }
-      };
-
-      recognition.onerror = (event: any) => {
-        console.error("Speech recognition error:", event.error);
-        // Only stop recording on actual errors, not on 'no-speech' or 'aborted'
-        if (event.error !== "no-speech" && event.error !== "aborted") {
-          setIsRecording(false);
-        }
-      };
-
-      recognition.onend = () => {
-        setIsRecording(false);
-      };
-
-      recognitionRef.current = recognition;
-    }
-
-    return () => {
-      if (recognitionRef.current) {
-        recognitionRef.current.abort();
-      }
-    };
-  }, []);
+  const [isTranscribing, setIsTranscribing] = useState(false);
+  const [isSupported] = useState(AudioRecorder.isSupported());
+  const audioRecorderRef = useRef<AudioRecorder | null>(null);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (message.trim()) {
       onSendMessage(message);
       setMessage("");
-      finalTranscriptRef.current = ""; // Reset transcript
     }
   };
 
-  const toggleRecording = () => {
-    if (!recognitionRef.current) return;
-
+  const toggleRecording = async () => {
     if (isRecording) {
-      recognitionRef.current.stop();
-      setIsRecording(false);
-      // Don't reset here - keep the transcript for user to review/edit
-    } else {
+      // Stop recording and transcribe
       try {
-        // Reset transcript when starting new recording
-        finalTranscriptRef.current = message; // Keep existing text
-        recognitionRef.current.start();
+        setIsRecording(false);
+        setIsTranscribing(true);
+
+        if (!audioRecorderRef.current) {
+          throw new Error("No audio recorder instance");
+        }
+
+        // Stop recording and get audio blob
+        const audioBlob = await audioRecorderRef.current.stopRecording();
+
+        // Send to transcription service
+        const result = await transcribeAudio(audioBlob);
+
+        // Add transcribed text to message field
+        if (result.text) {
+          setMessage((prev) => (prev ? prev + " " + result.text : result.text));
+        }
+      } catch (error) {
+        console.error("Error during transcription:", error);
+        alert(
+          error instanceof Error
+            ? error.message
+            : "Error al transcribir el audio. Por favor, inténtalo de nuevo.",
+        );
+      } finally {
+        setIsTranscribing(false);
+        audioRecorderRef.current = null;
+      }
+    } else {
+      // Start recording
+      try {
+        audioRecorderRef.current = new AudioRecorder();
+        await audioRecorderRef.current.startRecording();
         setIsRecording(true);
       } catch (error) {
-        console.error("Error starting recognition:", error);
+        console.error("Error starting recording:", error);
+        alert(
+          error instanceof Error
+            ? error.message
+            : "No se pudo acceder al micrófono. Por favor, verifica los permisos.",
+        );
+        audioRecorderRef.current = null;
       }
     }
+  };
+
+  // Get microphone button icon
+  const getMicIcon = () => {
+    if (isTranscribing) {
+      return <Loader2 size={20} className="animate-spin" />;
+    }
+    return isRecording ? <MicOff size={20} /> : <Mic size={20} />;
+  };
+
+  // Get microphone button title
+  const getMicTitle = () => {
+    if (isTranscribing) {
+      return "Transcribiendo...";
+    }
+    return isRecording ? "Detener grabación" : "Grabar audio";
   };
 
   return (
@@ -118,6 +105,7 @@ export function ChatInput({
               placeholder="Hazme cualquier consulta jurídica..."
               value={message}
               onChange={(e) => setMessage(e.target.value)}
+              disabled={isTranscribing}
             />
 
             {/* Schema Button - Icon style like microphone */}
@@ -135,10 +123,11 @@ export function ChatInput({
               <button
                 type="button"
                 onClick={toggleRecording}
-                className={`chat-input__mic-btn ${isRecording ? "recording" : ""}`}
-                title={isRecording ? "Detener grabación" : "Grabar audio"}
+                className={`chat-input__mic-btn ${isRecording ? "recording" : ""} ${isTranscribing ? "transcribing" : ""}`}
+                title={getMicTitle()}
+                disabled={isTranscribing}
               >
-                {isRecording ? <MicOff size={20} /> : <Mic size={20} />}
+                {getMicIcon()}
               </button>
             )}
 
@@ -147,7 +136,7 @@ export function ChatInput({
               variant="primary"
               size="sm"
               icon={<Send size={18} />}
-              disabled={!message.trim()}
+              disabled={!message.trim() || isTranscribing}
             >
               Consultar
             </Button>
