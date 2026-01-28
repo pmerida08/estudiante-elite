@@ -57,23 +57,6 @@ La aplicación incluye un sistema de **reconocimiento de voz en tiempo real** qu
 - ❌ **Firefox** - Sin soporte
 - ❌ **Internet Explorer** - Sin soporte
 
-Si el navegador no es compatible, el botón de micrófono simplemente no aparecerá y podrás usar la aplicación normalmente escribiendo tus preguntas.
-
----
-
-### 💡 Feedback Progresivo en Respuestas
-
-Cuando haces una pregunta, la aplicación muestra:
-
-1. **Indicadores de progreso** con mensajes sobre lo que está haciendo:
-   - "Analizando tu pregunta..."
-   - "Consultando la base de conocimientos..."
-   - "Generando respuesta..."
-
-2. **Tiempo de respuesta** mostrado de forma sutil al finalizar cada respuesta del asistente
-
-Esto proporciona transparencia sobre el proceso de IA y mejora la experiencia de usuario.
-
 ---
 
 ### 🤖 Arquitectura n8n y Lógica Pedagógica
