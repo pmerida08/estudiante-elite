@@ -138,7 +138,7 @@ export function ChatInput({
               type="button"
               onClick={onGenerateSummary}
               className="chat-input__icon-btn chat-input__schema-icon-btn"
-              title="Generar esquema de estudio"
+              title="Generar resumen de estudio"
             >
               <FileText size={20} />
             </button>

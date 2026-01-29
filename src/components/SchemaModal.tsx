@@ -1,4 +1,4 @@
-import { X, Copy, Check } from "lucide-react";
+import { X, Copy, Check, Download } from "lucide-react";
 import { useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
@@ -102,6 +102,19 @@ export function SchemaModal({ isOpen, onClose, content }: SchemaModalProps) {
     setTimeout(() => setCopied(false), 2000);
   };
 
+  const handleDownload = () => {
+    const blob = new Blob([content], { type: "text/markdown;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    const timestamp = new Date().toISOString().split("T")[0];
+    a.download = `resumen-estudio-${timestamp}.md`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+
   return (
     <div className="schema-modal-overlay animate-fade-in" onClick={onClose}>
       <div
@@ -110,9 +123,9 @@ export function SchemaModal({ isOpen, onClose, content }: SchemaModalProps) {
       >
         <header className="schema-modal__header">
           <div className="schema-modal__title-group">
-            <h2 className="schema-modal__title">Esquema de Estudio</h2>
+            <h2 className="schema-modal__title">Resumen de Estudio</h2>
             <p className="schema-modal__subtitle">
-              Generado automáticamente por tu Tutor Elite
+              Listo para importar a Notion
             </p>
           </div>
           <button className="schema-modal__close" onClick={onClose}>
@@ -134,6 +147,13 @@ export function SchemaModal({ isOpen, onClose, content }: SchemaModalProps) {
             className="schema-modal__copy-btn"
           >
             {copied ? "Copiado" : "Copiar"}
+          </Button>
+          <Button
+            variant="secondary"
+            icon={<Download size={18} />}
+            onClick={handleDownload}
+          >
+            Descargar .md
           </Button>
           <Button variant="primary" onClick={onClose}>
             Cerrar
