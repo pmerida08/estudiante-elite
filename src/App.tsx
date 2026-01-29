@@ -5,6 +5,7 @@ import { ChatMessage } from "./components/ChatMessage";
 import { ChatInput } from "./components/ChatInput";
 import { ThinkingIndicatorWithStatus } from "./components/ThinkingIndicatorWithStatus";
 import { AuthForm } from "./components/AuthForm";
+import { ThemeToggle } from "./components/ThemeToggle";
 import { useAuth } from "./contexts/AuthContext";
 import { sendMessageToTutor, generateSchema } from "./lib/n8n";
 import { getMessages, saveMessage, createConversation } from "./lib/chat";
@@ -230,6 +231,7 @@ function App() {
               <h2 className="app__header-title">Sesión de estudio</h2>
             </div>
             <div className="app__header-status">
+              <ThemeToggle />
               <img
                 src="/logoDerechoVirtual.png"
                 alt="Derecho Virtual"

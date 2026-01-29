@@ -30,7 +30,7 @@
 
 .chat-input__wrapper:focus-within {
   border-color: var(--color-primary-light);
-  background-color: white;
+  background-color: var(--color-surface-soft);
   box-shadow: var(--shadow-md);
   transform: translateY(-1px);
 }

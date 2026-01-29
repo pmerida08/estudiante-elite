@@ -34,7 +34,7 @@
 }
 
 .button--secondary {
-  background: white;
+  background: var(--color-background);
   color: var(--color-primary);
   border-color: var(--color-border);
 }

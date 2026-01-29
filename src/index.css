@@ -51,6 +51,35 @@
   --transition-base: 400ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
+/* Dark Mode Variables */
+[data-theme="dark"] {
+  /* Color System - Premium Gold & Dark */
+  --color-primary: #c4a75a;
+  --color-primary-light: #d4b76a;
+  --color-primary-dark: #9c7c34;
+
+  --color-background: #0f0f0f;
+  --color-surface: #1a1a1a;
+  --color-surface-soft: #242424;
+
+  --color-text-primary: #f5f5f5;
+  --color-text-secondary: #b0b0b0;
+  --color-text-muted: #808080;
+
+  --color-border: #2a2a2a;
+  --color-accent: #c4a75a;
+
+  /* Glassmorphism / Premium Surfaces - Dark */
+  --glass-bg: rgba(26, 26, 26, 0.8);
+  --glass-border: rgba(196, 167, 90, 0.15);
+  --glass-blur: 16px;
+
+  /* Shadows - Dark Mode */
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 10px 40px rgba(196, 167, 90, 0.1);
+}
+
 /* Base Styles */
 * {
   margin: 0;

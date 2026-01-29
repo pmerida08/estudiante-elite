@@ -69,13 +69,13 @@
 }
 
 .sidebar__conversation:hover {
-  background-color: white;
+  background-color: var(--color-surface-soft);
   border-color: var(--color-border);
   transform: translateX(4px);
 }
 
 .sidebar__conversation--active {
-  background-color: white;
+  background-color: var(--color-background);
   border-color: var(--color-primary-light);
   box-shadow: var(--shadow-sm);
 }
@@ -111,7 +111,7 @@
   width: 36px;
   height: 36px;
   border-radius: var(--radius-full);
-  background-color: white;
+  background-color: var(--color-background);
   color: var(--color-primary);
   display: flex;
   align-items: center;
