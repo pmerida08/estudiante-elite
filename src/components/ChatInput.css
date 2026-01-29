@@ -44,6 +44,11 @@
   font-family: var(--font-primary);
   font-size: 0.95rem;
   padding: var(--spacing-md) 0;
+  resize: none; /* Prevent manual resize */
+  overflow-y: auto; /* Show scrollbar if needed */
+  max-height: 120px; /* Max 5 lines approx */
+  min-height: 24px; /* Min 1 line */
+  line-height: 1.5;
 }
 
 .chat-input__field::placeholder {

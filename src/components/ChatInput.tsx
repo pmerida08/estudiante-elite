@@ -19,12 +19,32 @@ export function ChatInput({
   const [isTranscribing, setIsTranscribing] = useState(false);
   const [isSupported] = useState(AudioRecorder.isSupported());
   const audioRecorderRef = useRef<AudioRecorder | null>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  const adjustTextareaHeight = () => {
+    const textarea = textareaRef.current;
+    if (textarea) {
+      textarea.style.height = "auto";
+      textarea.style.height = `${Math.min(textarea.scrollHeight, 120)}px`;
+    }
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (message.trim()) {
       onSendMessage(message);
       setMessage("");
+      // Reset textarea height
+      if (textareaRef.current) {
+        textareaRef.current.style.height = "auto";
+      }
+    }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      handleSubmit(e);
     }
   };
 
@@ -99,13 +119,18 @@ export function ChatInput({
       <div className="chat-input__container">
         <form onSubmit={handleSubmit} className="chat-input__form">
           <div className="chat-input__wrapper">
-            <input
-              type="text"
+            <textarea
+              ref={textareaRef}
               className="chat-input__field"
               placeholder="Hazme cualquier consulta jurídica..."
               value={message}
-              onChange={(e) => setMessage(e.target.value)}
+              onChange={(e) => {
+                setMessage(e.target.value);
+                adjustTextareaHeight();
+              }}
+              onKeyDown={handleKeyDown}
               disabled={isTranscribing}
+              rows={1}
             />
 
             {/* Schema Button - Icon style like microphone */}
