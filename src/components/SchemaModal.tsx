@@ -1,9 +1,7 @@
-import { X, Copy, Check, FileDown } from "lucide-react";
-import { useState, useRef } from "react";
+import { X, Copy, Check } from "lucide-react";
+import { useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { jsPDF } from "jspdf";
-import html2canvas from "html2canvas";
 import "./SchemaModal.css";
 import { Button } from "./Button";
 import { Mermaid } from "./Mermaid";
@@ -14,85 +12,68 @@ interface SchemaModalProps {
   content: string;
 }
 
+/**
+ * Converts Markdown text to plain text suitable for pasting into DOCX
+ * Removes Markdown syntax while preserving structure and readability
+ */
+function convertMarkdownToPlainText(markdown: string): string {
+  let text = markdown;
+
+  // Remove code blocks (```...```)
+  text = text.replace(/```[\s\S]*?```/g, "");
+
+  // Remove inline code (`code`)
+  text = text.replace(/`([^`]+)`/g, "$1");
+
+  // Remove headers (# ## ### etc.) but keep the text
+  text = text.replace(/^#{1,6}\s+(.+)$/gm, "$1");
+
+  // Remove bold (**text** or __text__)
+  text = text.replace(/(\*\*|__)(.*?)\1/g, "$2");
+
+  // Remove italic (*text* or _text_)
+  text = text.replace(/(\*|_)(.*?)\1/g, "$2");
+
+  // Remove strikethrough (~~text~~)
+  text = text.replace(/~~(.*?)~~/g, "$1");
+
+  // Remove links but keep text [text](url) -> text
+  text = text.replace(/\[([^\]]+)\]\([^)]+\)/g, "$1");
+
+  // Remove images ![alt](url)
+  text = text.replace(/!\[([^\]]*)\]\([^)]+\)/g, "");
+
+  // Remove bullet points (-, *, +) but keep indentation
+  text = text.replace(/^[\s]*[-*+]\s+/gm, "");
+
+  // Remove numbered lists (1. 2. etc.) but keep text
+  text = text.replace(/^[\s]*\d+\.\s+/gm, "");
+
+  // Remove horizontal rules (---, ***, ___)
+  text = text.replace(/^[\s]*[-*_]{3,}[\s]*$/gm, "");
+
+  // Remove blockquotes (>) but keep text
+  text = text.replace(/^>\s+/gm, "");
+
+  // Clean up multiple consecutive blank lines
+  text = text.replace(/\n{3,}/g, "\n\n");
+
+  // Trim whitespace from start and end
+  text = text.trim();
+
+  return text;
+}
+
 export function SchemaModal({ isOpen, onClose, content }: SchemaModalProps) {
   const [copied, setCopied] = useState(false);
-  const [isExporting, setIsExporting] = useState(false);
-  const contentRef = useRef<HTMLDivElement>(null);
 
   if (!isOpen) return null;
 
   const handleCopy = () => {
-    navigator.clipboard.writeText(content);
+    const plainText = convertMarkdownToPlainText(content);
+    navigator.clipboard.writeText(plainText);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
-  };
-
-  const handleDownloadPDF = async () => {
-    if (!contentRef.current) return;
-    setIsExporting(true);
-
-    try {
-      // Capture the full scrollable content with padding from CSS
-      const canvas = await html2canvas(contentRef.current, {
-        scale: 2,
-        useCORS: true,
-        backgroundColor: "#ffffff",
-        windowWidth: contentRef.current.scrollWidth,
-        windowHeight: contentRef.current.scrollHeight,
-        onclone: (documentClone) => {
-          const container = documentClone.querySelector(
-            ".schema-modal__content",
-          ) as HTMLElement;
-          const markdown = documentClone.querySelector(
-            ".schema-modal__markdown",
-          ) as HTMLElement;
-          if (container && markdown) {
-            container.classList.add("printing-mode");
-            markdown.classList.add("printing-mode");
-            // Remove scroll constraints during capture
-            container.style.height = "auto";
-            container.style.maxHeight = "none";
-            container.style.overflow = "visible";
-          }
-        },
-      });
-
-      const imgData = canvas.toDataURL("image/png");
-      const pdf = new jsPDF({
-        orientation: "portrait",
-        unit: "pt",
-        format: "a4",
-      });
-
-      const pdfWidth = pdf.internal.pageSize.getWidth();
-      const pdfHeight = pdf.internal.pageSize.getHeight();
-      const imgProps = pdf.getImageProperties(imgData);
-
-      // Scale image to fit page width
-      const imgWidth = pdfWidth;
-      const imgHeight = (imgProps.height * pdfWidth) / imgProps.width;
-
-      let currentY = 0;
-
-      // Add pages with proper positioning
-      while (currentY < imgHeight) {
-        if (currentY > 0) {
-          pdf.addPage();
-        }
-
-        // Negative Y to shift the image up for subsequent pages
-        pdf.addImage(imgData, "PNG", 0, -currentY, imgWidth, imgHeight);
-
-        currentY += pdfHeight;
-      }
-
-      pdf.save(`esquema-${new Date().getTime()}.pdf`);
-    } catch (error) {
-      console.error("Error generating PDF:", error);
-      alert("Hubo un error al generar el PDF.");
-    } finally {
-      setIsExporting(false);
-    }
   };
 
   return (
@@ -113,10 +94,7 @@ export function SchemaModal({ isOpen, onClose, content }: SchemaModalProps) {
           </button>
         </header>
 
-        <div
-          className="schema-modal__content custom-scrollbar"
-          ref={contentRef}
-        >
+        <div className="schema-modal__content custom-scrollbar">
           <div className="schema-modal__markdown">
             <ReactMarkdown
               remarkPlugins={[remarkGfm]}
@@ -149,14 +127,6 @@ export function SchemaModal({ isOpen, onClose, content }: SchemaModalProps) {
             className="schema-modal__copy-btn"
           >
             {copied ? "Copiado" : "Copiar"}
-          </Button>
-          <Button
-            variant="secondary"
-            icon={<FileDown size={18} />}
-            onClick={handleDownloadPDF}
-            disabled={isExporting}
-          >
-            {isExporting ? "Exportando..." : "PDF"}
           </Button>
           <Button variant="primary" onClick={onClose}>
             Cerrar
