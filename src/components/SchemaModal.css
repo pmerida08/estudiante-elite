@@ -40,9 +40,32 @@
 }
 
 .schema-modal__subtitle {
-  font-size: 0.85rem;
-  color: var(--color-text-secondary);
-  margin-top: 2px;
+  font-size: 0.95rem;
+  color: var(--color-text-primary);
+  margin-top: 4px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 500;
+  opacity: 0.85;
+}
+
+.notion-logo {
+  display: inline-block;
+  vertical-align: middle;
+  animation: subtle-pulse 3s ease-in-out infinite;
+}
+
+@keyframes subtle-pulse {
+  0%,
+  100% {
+    opacity: 0.7;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
 }
 
 .schema-modal__close {
