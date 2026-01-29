@@ -103,7 +103,14 @@ export function SchemaModal({ isOpen, onClose, content }: SchemaModalProps) {
   };
 
   const handleDownload = () => {
-    const blob = new Blob([content], { type: "text/markdown;charset=utf-8" });
+    // Normalize line endings to LF (Unix style) for better compatibility
+    const normalizedContent = content.replace(/\r\n/g, "\n");
+
+    // Create blob with explicit UTF-8 encoding
+    const blob = new Blob([normalizedContent], {
+      type: "text/markdown;charset=utf-8",
+    });
+
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
