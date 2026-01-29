@@ -4,7 +4,6 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import "./SchemaModal.css";
 import { Button } from "./Button";
-import { Mermaid } from "./Mermaid";
 
 interface SchemaModalProps {
   isOpen: boolean;
@@ -96,26 +95,7 @@ export function SchemaModal({ isOpen, onClose, content }: SchemaModalProps) {
 
         <div className="schema-modal__content custom-scrollbar">
           <div className="schema-modal__markdown">
-            <ReactMarkdown
-              remarkPlugins={[remarkGfm]}
-              components={{
-                code({ node, inline, className, children, ...props }: any) {
-                  const match = /language-(\w+)/.exec(className || "");
-                  if (!inline && match && match[1] === "mermaid") {
-                    return (
-                      <Mermaid chart={String(children).replace(/\n$/, "")} />
-                    );
-                  }
-                  return (
-                    <code className={className} {...props}>
-                      {children}
-                    </code>
-                  );
-                },
-              }}
-            >
-              {content}
-            </ReactMarkdown>
+            <ReactMarkdown remarkPlugins={[remarkGfm]}>{content}</ReactMarkdown>
           </div>
         </div>
 
