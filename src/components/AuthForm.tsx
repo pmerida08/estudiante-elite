@@ -131,8 +131,11 @@ export function AuthForm() {
             <div className="auth-success animate-fade-in">
               <CheckCircle size={20} />
               <div>
-                <strong>¡Cuenta creada exitosamente!</strong>
-                <p>Confirma tu correo para empezar.</p>
+                <strong>🎓 ¡Bienvenido a Estudiante Elite!</strong>
+                <p>
+                  📧 Revisa tu correo electrónico y confirma tu cuenta para
+                  acceder a tu tutor pedagógico de IA premium.
+                </p>
               </div>
             </div>
           )}

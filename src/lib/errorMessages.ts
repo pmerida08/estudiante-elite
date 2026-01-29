@@ -10,7 +10,7 @@ export function translateAuthError(error: Error): string {
   }
 
   if (message.includes("email not confirmed")) {
-    return "Por favor confirma tu correo electrónico antes de iniciar sesión.";
+    return "🎓 Por favor, verifica tu correo electrónico para activar tu cuenta Elite y comenzar tu experiencia de estudio premium.";
   }
 
   if (message.includes("user already registered")) {
