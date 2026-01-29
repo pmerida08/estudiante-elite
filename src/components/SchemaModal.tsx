@@ -12,8 +12,8 @@ interface SchemaModalProps {
 }
 
 /**
- * Converts Markdown text to plain text suitable for pasting into DOCX
- * Removes Markdown syntax while preserving structure and readability
+ * Converts Markdown text to visually formatted plain text suitable for pasting into DOCX
+ * Preserves formatting using Unicode characters and spacing
  */
 function convertMarkdownToPlainText(markdown: string): string {
   let text = markdown;
@@ -24,16 +24,36 @@ function convertMarkdownToPlainText(markdown: string): string {
   // Remove inline code (`code`)
   text = text.replace(/`([^`]+)`/g, "$1");
 
-  // Remove headers (# ## ### etc.) but keep the text
-  text = text.replace(/^#{1,6}\s+(.+)$/gm, "$1");
+  // Convert headers to uppercase with separators for visual hierarchy
+  // H1: TITLE with double line separator
+  text = text.replace(/^#\s+(.+)$/gm, (_match, title) => {
+    return `\n${"═".repeat(60)}\n${title.toUpperCase()}\n${"═".repeat(60)}\n`;
+  });
 
-  // Remove bold (**text** or __text__)
-  text = text.replace(/(\*\*|__)(.*?)\1/g, "$2");
+  // H2: SUBTITLE with single line separator
+  text = text.replace(/^##\s+(.+)$/gm, (_match, subtitle) => {
+    return `\n${"─".repeat(50)}\n${subtitle.toUpperCase()}\n${"─".repeat(50)}`;
+  });
 
-  // Remove italic (*text* or _text_)
-  text = text.replace(/(\*|_)(.*?)\1/g, "$2");
+  // H3: Title Case with dots
+  text = text.replace(/^###\s+(.+)$/gm, (_match, title) => {
+    return `\n• ${title} •`;
+  });
 
-  // Remove strikethrough (~~text~~)
+  // H4-H6: Just bold
+  text = text.replace(/^#{4,6}\s+(.+)$/gm, "$1");
+
+  // Convert bold (**text** or __text__) to UPPERCASE
+  text = text.replace(/(\*\*|__)(.+?)\1/g, (_match, _marker, content) => {
+    return content.toUpperCase();
+  });
+
+  // Convert italic (*text* or _text_) to keep as is but with emphasis markers
+  text = text.replace(/(\*|_)(.+?)\1/g, (_match, _marker, content) => {
+    return `「${content}」`;
+  });
+
+  // Remove strikethrough (~~text~~) but keep text
   text = text.replace(/~~(.*?)~~/g, "$1");
 
   // Remove links but keep text [text](url) -> text
@@ -42,19 +62,26 @@ function convertMarkdownToPlainText(markdown: string): string {
   // Remove images ![alt](url)
   text = text.replace(/!\[([^\]]*)\]\([^)]+\)/g, "");
 
-  // Remove bullet points (-, *, +) but keep indentation
-  text = text.replace(/^[\s]*[-*+]\s+/gm, "");
+  // Convert bullet points to proper bullets with indentation
+  text = text.replace(/^(\s*)[-*+]\s+/gm, (_match, indent) => {
+    const level = Math.floor(indent.length / 2);
+    const bullets = ["●", "○", "▪", "▫"];
+    return `${"  ".repeat(level)}${bullets[level % bullets.length]} `;
+  });
 
-  // Remove numbered lists (1. 2. etc.) but keep text
-  text = text.replace(/^[\s]*\d+\.\s+/gm, "");
+  // Convert numbered lists to proper numbering with indentation
+  text = text.replace(/^(\s*)(\d+)\.\s+/gm, (_match, indent, num) => {
+    const level = Math.floor(indent.length / 2);
+    return `${"  ".repeat(level)}${num}. `;
+  });
 
   // Remove horizontal rules (---, ***, ___)
   text = text.replace(/^[\s]*[-*_]{3,}[\s]*$/gm, "");
 
-  // Remove blockquotes (>) but keep text
-  text = text.replace(/^>\s+/gm, "");
+  // Remove blockquotes (>) but keep text with quote marks
+  text = text.replace(/^>\s+(.+)$/gm, "  » $1");
 
-  // Clean up multiple consecutive blank lines
+  // Clean up multiple consecutive blank lines (max 2)
   text = text.replace(/\n{3,}/g, "\n\n");
 
   // Trim whitespace from start and end
